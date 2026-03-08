@@ -73,21 +73,18 @@ The notebook is organized into self-contained sections — run them top to botto
 
 ### Noising Progression
 
-The digit "3" at timesteps `t = 0, 50, 200, 500, 800, 999`:
-
-![Noising progression](assets/noising_progression.png)
+The digit `"3"` gradually corrupted across timesteps `t = 0, 50, 200, 500, 800, 999` — from a clean image to pure Gaussian noise. The cosine schedule preserves structure longer at early timesteps compared to the linear schedule.
 
 ### Denoising Step at t = 500
 
-`x0 | x_t | x0_hat | x_{t-1} (teacher) | x_{t-1} (from ε)`
+Each reverse step is visualised as: `x0 | x_t | x0_hat | x_{t-1} (teacher) | x_{t-1} (from ε)`
 
-![Denoising step](assets/denoise_step.png)
+The predicted `x0_hat` closely matches the original `x0`, confirming the model has learned to accurately predict and remove noise even at mid-range timesteps.
 
 ### Training Curves
 
-| Training Loss (MSE) | Gradient Norm |
-|:---:|:---:|
-| ![Loss](assets/train_loss.png) | ![Grad norm](assets/grad_norm.png) |
+- **Loss** drops rapidly in the first ~1,000 steps and stabilises, reaching near-zero MSE — indicating successful convergence.
+- **Gradient norm** grows after step ~10,000 but remains bounded, showing the model stays in an active learning regime without diverging.
 
 ---
 
@@ -145,10 +142,6 @@ x_T → x_{T-1} → ... → x_0
 | Training loss | ✅ Slightly lower & stable | Slightly higher |
 | Gradient norms | ✅ More stable | Larger fluctuations |
 | Sample quality | Visually similar | Visually similar |
-
-| Linear vs Cosine — Loss | Linear vs Cosine — Grad Norm |
-|:---:|:---:|
-| ![Loss comparison](assets/loss_comparison.png) | ![Grad comparison](assets/grad_comparison.png) |
 
 **Conclusion:** Both schedules work well on MNIST. The cosine schedule's advantage (preserving signal longer) becomes more significant on complex datasets like CIFAR-10.
 
